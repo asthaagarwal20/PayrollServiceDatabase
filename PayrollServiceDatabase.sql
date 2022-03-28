@@ -52,3 +52,48 @@ select max(salary) from employee_payroll;
 select count(gender) from employee_payroll where gender='F';
 select count(gender) from employee_payroll where gender='M';
 
+
+--UC8 Add phone no,address and department in table
+alter table employee_payroll
+add phone varchar(12),department varchar(20) not null default 'Cse',address varchar(30)  default 'Kanpur';
+
+
+--UC9 Add basic pay,Income tax,Net pay,Deductions,taxable pay
+alter table employee_payroll
+drop  column salary;
+alter table employee_payroll
+add basic_pay decimal,deduction decimal,taxable_pay decimal,income_tax decimal,net_pay decimal;
+
+
+--UC10 Add Teresa in sales and marketing Department
+insert into employee_payroll values('Teresa','2022-02-03','M','7007231604','sales','Gkp',50000,5000,45000,3000,42000);
+insert into employee_payroll values('Teresa','2022-02-03','M','7007231604','marketing','Gkp',50000,5000,45000,3000,42000);
+
+
+--UC11 ER Diagram
+create table department_table
+(
+dapartment_id int identity(1,1) primary key,
+department_name varchar(20),
+);
+alter table employee_payroll
+drop column department;
+create table Payroll
+(
+service_id int identity(1,1),
+Employee_id int FOREIGN Key references employee_payroll(employeeId),
+Department_id int FOREIGN Key references department_table(dapartment_id),
+);
+insert into department_table values('Sales');
+insert into department_table values('marketing');
+insert into department_table values('web development');
+insert into department_table values('Software development');
+select * from department_table;
+select * from employee_payroll;
+delete from employee_payroll where employeeId=8;
+insert into payroll values(7,1);
+insert into payroll values(7,2);
+select * from payroll;
+select Employee_Payroll.name,department_table.department_name from ((Payroll inner join Employee_Payroll on Payroll.Employee_id=Employee_Payroll.employeeId)inner join department_table on Payroll.Department_id=department_table.dapartment_id); 
+
+ 
